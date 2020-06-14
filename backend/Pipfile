@@ -1,0 +1,33 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+mypy = "*"
+pylint = "*"
+pylint-flask-sqlalchemy = "*"
+Flask-Migrate = "*"
+
+[packages]
+python-dotenv = "*"
+psycopg2 = "*"
+aniso8601 = "*"
+click = "*"
+itsdangerous = "*"
+psycopg2-binary = "*"
+pytz = "*"
+six = "*"
+Flask = "*"
+Flask-SQLAlchemy = "*"
+SQLAlchemy = "*"
+Flask-Cors = "*"
+Flask-RESTful = "*"
+Jinja2 = "*"
+MarkupSafe = "*"
+Werkzeug = "*"
+mypy = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.8"
