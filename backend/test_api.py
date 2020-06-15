@@ -17,10 +17,14 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_application('Testing')
         self.client = self.app.test_client
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
 
     def tearDown(self):
         """Executed after reach test"""
-        pass
+        db.session.remove()
+        self.app_context.pop()
 
     def test_get_one_question(self):
         """Test getting a specific question."""
@@ -46,16 +50,16 @@ class TriviaTestCase(unittest.TestCase):
 #        self.assertTrue(len(data['questions']))
 
 
-#    def test_get_default_page_of_questions(self):
-#        """Test getting the list of trivia categories."""
-#        response = self.client().get('/categories')
-#        self.assertEqual(response.status_code, 200)
+    def test_get_categories(self):
+        """Test getting the list of trivia categories."""
+        response = self.client().get('/categories')
+        self.assertEqual(response.status_code, 200)
 #
 #        data = json.loads(response.data)
 #        self.assertTrue(data['success'])
-        #self.assertEqual(data['totalQuestions'], 19)
-        #self.assertTrue(len(data['categories']))
-        #self.assertTrue(len(data['questions']))
+#        self.assertEqual(data['totalQuestions'], 19)
+#        self.assertTrue(len(data['categories']))
+#        self.assertTrue(len(data['questions']))
 
 
 if __name__ == "__main__":
