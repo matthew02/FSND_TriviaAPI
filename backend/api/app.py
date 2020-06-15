@@ -18,20 +18,25 @@ load_dotenv(find_dotenv())
 
 
 def create_application(config='Development'):
-    # create and configure the app
+    """Initializes the core application."""
     app = Flask(__name__)
     app.config.from_object(f'config.{config}Config')
+
+    # Initialize plugins
     db.app = app
     db.init_app(app)
     db.create_all()
     Cors(app)
     #Cors(app, resources={r'*/api/*': {origins: '*}})
+
     with app.app_context():
+        # Import routes
         import api.resources.categories
         import api.resources.questions
         import api.resources.quizzes
-        import api.resources.errors
-    return app
+        import api.errors.handlers
+
+        return app
 
     @app.after_request
     def after_request(response):
