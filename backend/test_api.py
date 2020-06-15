@@ -17,15 +17,9 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_application('Testing')
         self.client = self.app.test_client()
-        #self.app_context = self.app.app_context()
-        #self.app_context.push()
-        db.create_all()
 
     def tearDown(self):
         """Executed after reach test"""
-        #self.app_context.pop()
-        db.session.remove()
-        db.drop_all()
 
     def test_get_one_question(self):
         """Test getting a specific question."""
