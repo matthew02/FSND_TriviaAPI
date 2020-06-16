@@ -28,10 +28,11 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_one_question(self):
         """Test getting a specific question."""
         response = self.client.get('/questions/2')
-
         data = response.get_json()
+
         #print(f'question data is {data}')
         #print(f'question mimetype is {response.mimetype}')
+
         self.assertEqual(response.status_code, 200)
 
         #self.assertTrue(data['success'])
@@ -45,20 +46,21 @@ class TriviaTestCase(unittest.TestCase):
 #        response = self.client.get('/questions')
 #        print(f'test_get_default_page_of_questions response is {response}')
 #        self.assertEqual(response.status_code, 200)
-##
-##        data = json.loads(response.data)
-##        self.assertTrue(data['success'])
-##        self.assertEqual(data['totalQuestions'], 19)
-##        self.assertTrue(len(data['categories']))
-##        self.assertTrue(len(data['questions']))
+#
+#        data = json.loads(response.data)
+#        self.assertTrue(data['success'])
+#        self.assertEqual(data['totalQuestions'], 19)
+#        self.assertTrue(len(data['categories']))
+#        self.assertTrue(len(data['questions']))
 #
 #
     def test_get_categories(self):
         """Test getting the list of trivia categories."""
         response = self.client.get('/categories')
+        data = response.get_json()
+
         self.assertEqual(response.status_code, 200)
 
-        data = response.get_json()
         #print(f'categories data is {data}')
         #print(f'categories mimetype is {response.mimetype}')
 
@@ -66,10 +68,11 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_category_of_questions(self):
         """Test getting a list of trivia questions by category."""
         response = self.client.get('/categories/2/questions')
-
         data = response.get_json()
+
         #print(f'category questions data is {data}')
         #print(f'category questions mimetype is {response.mimetype}')
+
         self.assertEqual(response.status_code, 200)
 
 
