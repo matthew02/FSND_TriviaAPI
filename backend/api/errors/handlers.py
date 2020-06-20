@@ -25,3 +25,11 @@ def unprocessable(error):
         'error': 422,
         'message': 'Unprocessable request.',
     }), 422
+
+@current_app.errorhandler(500)
+def server_error(error):
+    return jsonify({
+        'success': False,
+        'error': 500,
+        'message': 'Internal server error.',
+    }), 500
