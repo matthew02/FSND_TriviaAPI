@@ -18,6 +18,7 @@ class QuestionAPI():
         Question.delete_by_id(question_id)
         return jsonify({
             'success': True,
+            'totalQuestions': Question.count_all(),
         })
 
     @staticmethod
@@ -25,11 +26,11 @@ class QuestionAPI():
         """Fetches one question from the database."""
         question = Question.fetch_by_id(question_id)
 
-        categories = [
-            category['type']
+        categories = {
+            category['id']: category['type']
             for category
             in Category.fetch_all(Category.id)
-        ]
+        }
 
         return jsonify({
             'success': True,
@@ -46,11 +47,11 @@ class QuestionAPI():
         page = int(request.args.get('page', 1))
         questions = Question.fetch_page(page, Config.PAGE_LENGTH)
 
-        categories = [
-            category['type']
+        categories = {
+            category['id']: category['type']
             for category
             in Category.fetch_all(Category.id)
-        ]
+        }
 
         return jsonify({
             'success': True,
@@ -67,6 +68,8 @@ class QuestionAPI():
         question.insert()
         return jsonify({
             'success': True,
+            'questions': [question.json()],
+            'totalQuestions': Question.count_all(),
         })
 
     @staticmethod
