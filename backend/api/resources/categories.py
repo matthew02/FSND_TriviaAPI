@@ -15,11 +15,11 @@ class CategoryAPI():
         """Fetches a list of all categories."""
         return jsonify({
             'success': True,
-            'categories': [
-                category['type']
+            'categories': {
+                category['id']: category['type']
                 for category
                 in Category.fetch_all(Category.id)
-            ]
+            }
         })
 
     @staticmethod
