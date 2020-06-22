@@ -1,21 +1,23 @@
 """API interface for trivia Questions."""
-
-from typing import Optional
-
-from flask import Response, current_app, jsonify, request
+from flask import Response, abort, current_app, jsonify, request
 
 from api.models.category import Category
 from api.models.question import Question
 from config import Config
-
 
 class QuestionAPI():
     """API interface for trivia Questions."""
 
     @staticmethod
     def delete(question_id: int) -> Response:
-        """Deletes a question."""
-        Question.delete_by_id(question_id)
+        """Deletes a question.
+
+        Args:
+            question_id: The id of the question to be deleted.
+        """
+        if not Question.delete_by_id(question_id):
+            abort(404)
+
         return jsonify({
             'success': True,
             'totalQuestions': Question.count_all(),
@@ -23,41 +25,38 @@ class QuestionAPI():
 
     @staticmethod
     def get_one(question_id: int) -> Response:
-        """Fetches one question from the database."""
-        question = Question.fetch_by_id(question_id)
+        """Fetches one question from the database.
 
-        categories = {
-            category['id']: category['type']
-            for category
-            in Category.fetch_all(Category.id)
-        }
+        Args:
+            question_id: The id of the requested question.
+        """
+        question = Question.fetch_by_id(question_id)
+        if not question:
+            abort(404)
 
         return jsonify({
             'success': True,
             'questions': [question],
             'totalQuestions': Question.count_all(),
-            'categories': categories,
-            'currentCategory': question['category'],
+            'categories': Category.fetch_all(order_by=Category.id),
+            'currentCategory': question.get('category'),
         })
 
     @staticmethod
     def get_page() -> Response:
         """Fetches one page of questions from the database.
-        If no specific page is requested, default to page 1."""
+        If no specific page is requested, default to page 1.
+        Page numbers are passed as request arguments."""
         page = int(request.args.get('page', 1))
         questions = Question.fetch_page(page, Config.PAGE_LENGTH)
-
-        categories = {
-            category['id']: category['type']
-            for category
-            in Category.fetch_all(Category.id)
-        }
+        if not questions:
+            abort(404)
 
         return jsonify({
             'success': True,
             'questions': questions,
             'totalQuestions': Question.count_all(),
-            'categories': categories,
+            'categories': Category.fetch_all(order_by=Category.id),
             'currentCategory': None,
         })
 
@@ -65,6 +64,11 @@ class QuestionAPI():
     def post_new() -> Response:
         """Adds a new question to the game."""
         question = Question(**request.get_json())
+        if (not question.question or
+            not question.answer or
+            not question.difficulty or
+            not Category.fetch_by_id(question.category)):
+            abort(400)
         question.insert()
         return jsonify({
             'success': True,

@@ -2,6 +2,14 @@
 
 from flask import current_app, jsonify
 
+@current_app.errorhandler(400)
+def not_found(error):
+    return jsonify({
+        'success': False,
+        'error': 400,
+        'message': 'Request not understood.',
+    }), 400
+
 @current_app.errorhandler(404)
 def not_found(error):
     return jsonify({

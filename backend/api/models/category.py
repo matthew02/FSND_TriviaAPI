@@ -1,5 +1,6 @@
 """Defines the trivia Category model."""
-from typing import Any, Dict
+
+from typing import Any, Dict, Optional
 
 from api.models.model import db, Model
 
@@ -15,6 +16,23 @@ class Category(Model):
         return f'<Category {self.id} {self.type}>'
 
     @classmethod
-    def validate_all(cls, json: Dict[str, Any]) -> None:
-        """Validates all model attributes of this resource."""
-        raise NotImplementedError
+    def fetch_all(
+        cls,
+        order_by: Optional[object] = None
+    ) -> Optional[Dict[str, Any]]:
+        """Fetches all categories, ordered.
+
+        Args:
+            order_by: SQLAlchemy ORDER BY criterion (see SQLAlchemy docs)
+
+        Returns:
+            An ordered dict of all categories or None.
+        """
+        categories = cls.query.order_by(order_by).all()
+        if categories:
+            return {category.id: category.type for category in categories}
+
+#    @classmethod
+#    def validate_all(cls, json: Dict[str, Any]) -> None:
+#        """Validates all model attributes of this resource."""
+#        raise NotImplementedError

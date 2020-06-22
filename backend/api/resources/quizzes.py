@@ -24,11 +24,11 @@ class QuizAPI():
         if category.get('type') == 'click':
             questions = Question.fetch_all()
         else:
-            category = Category.fetch_one_filtered({
+            category = Category.fetch_first_filtered({
                 'type': category.get('type')
             })
             questions = Question.fetch_all_filtered({
-                'category': category.id
+                'category': category.get('id')
             })
 
         # Enumerate the set of questions which have not previously been asked
