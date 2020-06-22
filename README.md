@@ -67,12 +67,17 @@ Then to start the server, run:
 # API Documentation
 ## Available Endpoints
 [**GET** /categories](#get_categories)
+
 [**GET** /categories/\<category_id\>/questions](#get_categories_questions)
 
 [**GET** /questions](#get_questions)
+
 [**GET** /questions/\<question_id\>](#get_question_by_id)
+
 [**POST** /questions](#post_question)
+
 [**POST** /questions/search](#search_questions)
+
 [**DELETE** /questions/\<question_id\>](#delete_question)
 
 [**POST** /quizzes](#dispatch_question)
